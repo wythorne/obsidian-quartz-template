@@ -1,23 +1,54 @@
-# Obsidian / Quartz / GitHub Pages Template
+# Wythorne Quartz Site
 
-Deployed URL: https://defenderofbasic.github.io/obsidian-quartz-template
+Deployed URL will be:
 
-Template for hosting your Obsidian notebook on GitHub pages with CI deployment. 
+- `https://wythorne.github.io/obsidian-quartz-template`
 
-## Basic setup
+This repo is configured to publish the Obsidian vault from:
 
-Full tutorial with screenshots & videos: https://dev.to/defenderofbasic/host-your-obsidian-notebook-on-github-pages-for-free-8l1. 
+- `/Users/radorrans/Downloads/Wythorne`
 
-It's basically (1) fork this (2) go to repo's "Settings" > "Pages", Under "Build and Deployment" select GitHub Actions. Then go to "Actions" and enable GitHub actions for your fork. Edit the pages in [source/content](./source/content) with Obsidian or any text editor. It generates HTML using [Quartz](https://github.com/jackyzha0/quartz). To generate the HTML locally, run `npx quartz build --serve` in `./source/`
+into Quartz content at:
 
-## Raw HTML pages
+- `source/content`
 
-There is a [source/raw_html](./source/raw_html) folder that gets copied into the build folder in CI. This lets you host arbitrary HTML outside of quartz. Example: https://defenderofbasic.github.io/obsidian-quartz-template/raw-html-test.html
+## What I changed
 
-I made the "raw HTML" option for people who are generating HTML UI's with Claude/ChatGPT but want to tweak them/host them themselves. Or make a personal archive of web pages, etc.
+- imported the Wythorne vault into `source/content`
+- generated a homepage for the site
+- converted the vault's Dataview blocks into static markdown for Quartz publishing
+- set Quartz `pageTitle` and `baseUrl` for this repo
+- disabled template analytics
+- added an export script so the site can be refreshed from the original vault later
 
-## Further customization
+## Refresh the site after the Obsidian vault changes
 
-> Quartz is meant to be extremely configurable, even if you don’t know any coding. Most of the configuration you should need can be done by just editing quartz.config.ts or changing the layout in quartz.layout.ts.
+From the repo root:
 
-https://quartz.jzhao.xyz/configuration
+```bash
+python3 scripts/export_wythorne_vault.py
+```
+
+## Preview locally
+
+```bash
+cd source
+npm install
+npx quartz build --serve
+```
+
+Then open the local URL Quartz prints.
+
+## Publish on GitHub Pages
+
+1. Push this repository to the `main` branch on GitHub.
+2. In the GitHub repo, open **Settings → Pages**.
+3. Under **Build and deployment**, choose **GitHub Actions**.
+4. In **Actions**, allow workflows if GitHub asks.
+5. Push again or run the existing workflow manually.
+
+The workflow in `.github/workflows/ci.yaml` will build Quartz and deploy the site automatically.
+
+## Important note about Dataview
+
+Quartz does not execute Obsidian Dataview queries in the browser the way Obsidian does. To make this vault publish cleanly, the export script replaces those Dataview blocks with static generated lists/tables at export time.
